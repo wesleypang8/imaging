@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
+import java.util.Stack;
 import java.awt.Color;
 import java.awt.image.*;
 import java.awt.Point;
@@ -15,8 +16,7 @@ public class EffectManager {
 
     private String[] effects;
     private BufferedImage currImage;
-    private BufferedImage prevImage;
-    private BufferedImage origImage;
+    private Stack<BufferedImage> prevImages;
     private int width;
     private int height;
     private int bitPixelWidth;
@@ -25,14 +25,13 @@ public class EffectManager {
         effects = new String[] { "---", "Vertical Flip", "Horizontal Flip", "Invert", "Negative", "Darken", "Lighten",
                 "8-Bit", "Pixel Sort", "Grayscale", "Sharpen", "Add Noise", "Saturate", "Light Only" };
         currImage = img;
-        origImage = img;
+        prevImages = new Stack<BufferedImage>();
         bitPixelWidth = 5;
     }
 
     public BufferedImage setImage(BufferedImage img) {
         currImage = img;
-        prevImage = img;
-        origImage = img;
+        prevImages.clear();
         width = img.getWidth();
         height = img.getHeight();
         bitPixelWidth = 5;
@@ -49,13 +48,14 @@ public class EffectManager {
 
     public BufferedImage buildImage(String s) {
         if (s.equals("Undo")) {
-            BufferedImage temp = prevImage;
-            prevImage = currImage;
-            currImage = temp;
+
+            if(!prevImages.isEmpty()){
+                currImage = prevImages.pop();
+            }
 
             return currImage;
         }
-        prevImage = currImage;
+        prevImages.push(currImage);
         switch (s) {
         case "Vertical Flip":
             currImage = verticalFlip();
@@ -100,7 +100,9 @@ public class EffectManager {
             currImage = deepfry();
         break;
         case "Reset":
-            currImage = origImage;
+            while(!prevImages.isEmpty()){
+                currImage= prevImages.pop();
+            }
             bitPixelWidth = 5;
 
         }
@@ -108,8 +110,6 @@ public class EffectManager {
         return currImage;
 
     }
-
-
 
     private BufferedImage lightOnly() {
         BufferedImage result = new BufferedImage(currImage.getWidth(), currImage.getHeight(), 1);
@@ -225,15 +225,12 @@ public class EffectManager {
 
             }
         });
-        System.out.println(colorList.size());
-        System.out.println((width - 1) * (height - 1));
-        System.out.println((height - 1) * width + height - 1);
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 result.setRGB(x, y, colorList.get(y * (width - 1) + y).getRGB());
             }
         }
-        System.out.println("done");
         return result;
     }
 
@@ -419,10 +416,5 @@ public class EffectManager {
         return result;
     }
 
-    public BufferedImage reset() {
-        currImage = origImage;
-        bitPixelWidth = 5;
-        return origImage;
-    }
 
 }

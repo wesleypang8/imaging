@@ -37,7 +37,7 @@ public class ImagingView extends JComponent {
      */
     public void reset() {
 
-        img = em.reset();
+        change("Reset");
         repaint();
     }
 
