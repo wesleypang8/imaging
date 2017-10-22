@@ -1,69 +1,50 @@
 package imaging;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 import java.awt.dnd.DropTarget;
 
+/**
+ * Resizable GUI used to manipulate images. Contains a view and controller (and
+ * model).
+ * 
+ * @author WP
+ *
+ */
 public class ImagingGUI {
 
     private JFrame frame;
-    
-    public ImagingGUI(){
-        
-      //  EffectManager em = new EffectManager(getImage("./src/imaging/Irelia.jpg"));
-        EffectManager em = new EffectManager(null);
-        
+
+    /**
+     * The GUI
+     */
+    public ImagingGUI() {
+
+        // create frame
         frame = new JFrame("Imaging");
-        frame.setPreferredSize(new Dimension(1024,768));    
-        frame.setLayout(new BoxLayout(frame.getContentPane(),
-                BoxLayout.Y_AXIS));
-        
+        frame.setPreferredSize(new Dimension(1024, 768));
+        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 
-        
-      //  EffectManager em = new EffectManager(d.getImage());
+        // initialize manager/model
+        EffectManager em = new EffectManager(null);
 
+        // initialize view
         ImagingView view = new ImagingView(em);
         frame.add(view);
-        
+
+        // add drag and drop capabilities
         DragListener d = new DragListener(view);
-        new DropTarget(frame,d);
-        
+        new DropTarget(frame, d);
+
+        // initialize controller
         ImagingController control = new ImagingController(view, em);
         frame.add(control);
-
 
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    
-    /**
-     * returns the image corresponding to input
-     * 
-     * @param s
-     *            name/relative path of image
-     * @return the image as a BufferedImage
-     * @throws IllegalArgumentException
-     *             if arg is null
-     */
-    private BufferedImage getImage(String s) {
-        if (s == null) {
-            throw new IllegalArgumentException();
-        }
-        try {
-            return ImageIO.read(new File(s));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
 
-    
 }

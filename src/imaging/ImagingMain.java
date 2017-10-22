@@ -1,16 +1,21 @@
 package imaging;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
-
+/**
+ * Initializes the GUI that allows the client to manipulate images.
+ * 
+ * @author WP
+ *
+ */
 public class ImagingMain {
 
-    public static void main(String[] args){
+    /**
+     * main
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
         ImagingGUI imagingGUI = new ImagingGUI();
-        
+
     }
-    
 
 }

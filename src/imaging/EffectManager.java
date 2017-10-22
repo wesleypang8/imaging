@@ -5,13 +5,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Stack;
 import java.awt.Color;
 import java.awt.image.*;
-import java.awt.Point;
 
+/**
+ * This class manages the effects and how they work. Works with ImagingView to
+ * manipulate the current image.
+ * 
+ * @author WP
+ *
+ */
 public class EffectManager {
 
     private String[] effects;
@@ -21,6 +26,12 @@ public class EffectManager {
     private int height;
     private int bitPixelWidth;
 
+    /**
+     * constructor, loads in pre given list of effects.
+     * 
+     * @param img
+     *            the image to initialize to if any
+     */
     public EffectManager(BufferedImage img) {
         effects = new String[] { "---", "Vertical Flip", "Horizontal Flip", "Invert", "Negative", "Darken", "Lighten",
                 "8-Bit", "Pixel Sort", "Grayscale", "Sharpen", "Add Noise", "Saturate", "Light Only" };
@@ -29,6 +40,13 @@ public class EffectManager {
         bitPixelWidth = 5;
     }
 
+    /**
+     * overrides old image with new image
+     * 
+     * @param img
+     *            new image
+     * @return the same image
+     */
     public BufferedImage setImage(BufferedImage img) {
         currImage = img;
         prevImages.clear();
@@ -38,18 +56,27 @@ public class EffectManager {
         return img;
     }
 
+    /**
+     * returns array of all effects
+     * 
+     * @return array of all effects
+     */
     public String[] getEffects() {
         return effects;
     }
 
-    public BufferedImage getImage() {
-        return currImage;
-    }
-
+    /**
+     * manipulates the image with the chosen effect/action. Note that pixel
+     * width for the 8-bit effect will only reset when "Reset" is chosen
+     * 
+     * @param s
+     *            the effect/action to perform on the image
+     * @return the post-op version of the image.
+     */
     public BufferedImage buildImage(String s) {
         if (s.equals("Undo")) {
 
-            if(!prevImages.isEmpty()){
+            if (!prevImages.isEmpty()) {
                 currImage = prevImages.pop();
             }
 
@@ -100,8 +127,8 @@ public class EffectManager {
             currImage = deepfry();
         break;
         case "Reset":
-            while(!prevImages.isEmpty()){
-                currImage= prevImages.pop();
+            while (!prevImages.isEmpty()) {
+                currImage = prevImages.pop();
             }
             bitPixelWidth = 5;
 
@@ -415,6 +442,5 @@ public class EffectManager {
         }
         return result;
     }
-
 
 }

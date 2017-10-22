@@ -8,6 +8,13 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Controller for GUI, allows client to choose which effect/action to perform on
+ * image.
+ * 
+ * @author WP
+ *
+ */
 public class ImagingController extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -15,6 +22,14 @@ public class ImagingController extends JPanel {
     private ImagingView view;
     JComboBox<String> options;
 
+    /**
+     * constructor
+     * 
+     * @param view
+     *            the view to interact with
+     * @param em
+     *            the manager that operates on the image
+     */
     public ImagingController(ImagingView view, EffectManager em) {
         if (view == null) {
             throw new IllegalArgumentException();
@@ -30,20 +45,19 @@ public class ImagingController extends JPanel {
         JButton go = new JButton("Go!");
         go.addActionListener(new ButtonListener());
         this.add(go);
-        
+
         JButton df = new JButton("DEEPFRY");
         df.addActionListener(new ButtonListener());
         this.add(df);
-        
+
         JButton undo = new JButton("Undo");
         undo.addActionListener(new ButtonListener());
         this.add(undo);
-        
+
         JButton reset = new JButton("Reset");
         reset.addActionListener(new ButtonListener());
         this.add(reset);
 
-        
     }
 
     /**
@@ -55,25 +69,22 @@ public class ImagingController extends JPanel {
     private class ButtonListener implements ActionListener {
 
         /**
-         * activates on ActionEvents. Either tells view to find a path or resets
-         * the view and controller
+         * activates on ActionEvents. tells view which action to perform
          */
         @Override
         public void actionPerformed(ActionEvent e) {
             String action = e.getActionCommand();
-            if (action.equals("Go!")){
+            if (action.equals("Go!")) {
                 view.change((String) options.getSelectedItem());
-            } else if(action.equals("DEEPFRY")){
+            } else if (action.equals("DEEPFRY")) {
                 view.change("DEEPFRY");
-                
-            }else if (action.equals("Undo")){
+
+            } else if (action.equals("Undo")) {
                 view.change("Undo");
-            }
-            else {
-            
+            } else {
+
                 view.change("Reset");
             }
-            
 
         }
 

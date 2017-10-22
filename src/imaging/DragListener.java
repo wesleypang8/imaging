@@ -9,10 +9,22 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
+/**
+ * enables drag and dropping. The image must be stored/saved somewhere local.
+ * 
+ * @author WP
+ *
+ */
 public class DragListener implements DropTargetListener {
     private BufferedImage img;
     private ImagingView view;
 
+    /**
+     * Constructor
+     * 
+     * @param view
+     *            the view to interact with
+     */
     public DragListener(ImagingView view) {
         this.view = view;
     }
@@ -46,10 +58,10 @@ public class DragListener implements DropTargetListener {
         for (DataFlavor f : df) {
             try {
                 if (f.isFlavorJavaFileListType()) {
-                    List<File> files =  (List<File>) t.getTransferData(f);
+                    List<File> files = (List<File>) t.getTransferData(f);
 
-                    for(File s : files){
-                        displayImage(s.getPath());
+                    for (File s : files) {
+                        setImage(s.getPath());
 
                     }
 
@@ -62,7 +74,7 @@ public class DragListener implements DropTargetListener {
 
     }
 
-    private void displayImage(String path) {
+    private void setImage(String path) {
 
         try {
             img = ImageIO.read(new File(path));
@@ -72,8 +84,8 @@ public class DragListener implements DropTargetListener {
         }
     }
 
-    public BufferedImage getImage() {
-        return img;
-    }
+    // public BufferedImage getImage() {
+    // return img;
+    // }
 
 }
