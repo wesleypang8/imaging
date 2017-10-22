@@ -14,14 +14,12 @@ public class ImagingController extends JPanel {
 
     private ImagingView view;
     JComboBox<String> options;
-    private EffectManager em;
 
     public ImagingController(ImagingView view, EffectManager em) {
         if (view == null) {
             throw new IllegalArgumentException();
         }
         this.view = view;
-        this.em = em;
         this.setLayout(new FlowLayout());
 
         String[] effects = em.getEffects();

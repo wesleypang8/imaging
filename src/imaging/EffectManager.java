@@ -24,9 +24,18 @@ public class EffectManager {
                 "8-Bit", "Pixel Sort", "Grayscale", "Sharpen", "Add Noise", "Saturate" };
         currImage = img;
         origImage = img;
+//        width = img.getWidth();
+//        height = img.getHeight();
+        bitPixelWidth = 5;
+    }
+    
+    public BufferedImage setImage(BufferedImage img){
+        currImage = img;
+        origImage = img;
         width = img.getWidth();
         height = img.getHeight();
         bitPixelWidth = 5;
+        return img;
     }
 
     public String[] getEffects() {

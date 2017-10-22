@@ -8,28 +8,36 @@ import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
+import java.awt.dnd.DropTarget;
+
 public class ImagingGUI {
 
     private JFrame frame;
     
     public ImagingGUI(){
         
-        EffectManager em = new EffectManager(getImage("./src/imaging/Irelia.jpg"));
-
+      //  EffectManager em = new EffectManager(getImage("./src/imaging/Irelia.jpg"));
+        EffectManager em = new EffectManager(null);
         
         frame = new JFrame("Imaging");
         frame.setPreferredSize(new Dimension(1024,768));    
         frame.setLayout(new BoxLayout(frame.getContentPane(),
                 BoxLayout.Y_AXIS));
         
+
+        
+      //  EffectManager em = new EffectManager(d.getImage());
+
         ImagingView view = new ImagingView(em);
         frame.add(view);
         
+        DragListener d = new DragListener(view);
+        new DropTarget(frame,d);
+        
         ImagingController control = new ImagingController(view, em);
         frame.add(control);
-        ImagingController control2 = new ImagingController(view, em);
-      //  frame.add(control2);
-        
+
+
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,5 +64,6 @@ public class ImagingGUI {
         return null;
     }
     
+
     
 }

@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.FontMetrics;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -55,8 +57,17 @@ public class ImagingView extends JComponent {
 
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0,0,this.getWidth(),this.getHeight());
+        graphics.setColor(Color.WHITE);
+        String dnd = "Drag and Drop an Image!";
+        FontMetrics fm = graphics.getFontMetrics();
+        Rectangle2D r = fm.getStringBounds(dnd, graphics);
+        int x = (this.getWidth() - (int) r.getWidth()) / 2;
+        int y = (this.getHeight() - (int) r.getHeight()) / 2 + fm.getAscent();
+        graphics.drawString(dnd, x, y);
 
-
+        if(img==null){
+            return;
+        }
         double scalingFactor = this.getHeight() / (double) img.getHeight();
         if ((int) (img.getWidth() * scalingFactor) > this.getWidth()) {
             scalingFactor = this.getWidth() / (double) img.getWidth();
@@ -71,17 +82,21 @@ public class ImagingView extends JComponent {
         
         graphics.drawImage(img, xOffset, yOffset, destX+xOffset, destY+yOffset,
                 0, 0, img.getWidth(), img.getHeight(), null);
-        // graphics.drawImage(img, 0, 0, (int)(img.getWidth()*scalingFactor),
-        // (int)(img.getHeight()*scalingFactor), 0, 0, img.getWidth(),
-        // img.getHeight(), null);
+
 
         
 
     }
 
-
+    public void setImage(BufferedImage img){
+        this.img = em.setImage(img);
+        repaint();
+    }
 
     public void change(String s) {
+        if(img == null){
+            return;
+        }
         img = em.buildImage(s);
         repaint();
     }
