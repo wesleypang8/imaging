@@ -55,26 +55,21 @@ public class ImagingView extends JComponent {
 
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0,0,this.getWidth(),this.getHeight());
-        // scales image pixels to size of view so locations match
-        double wRatio = (this.getWidth() + 0.0) / img.getWidth();
-        double hRatio = (this.getHeight() + 0.0) / img.getHeight();
 
-        System.out.println(this.getWidth());
-        System.out.println(this.getHeight());
+
         double scalingFactor = this.getHeight() / (double) img.getHeight();
         if ((int) (img.getWidth() * scalingFactor) > this.getWidth()) {
             scalingFactor = this.getWidth() / (double) img.getWidth();
         }
-        System.out.println("scaling: "+scalingFactor);
-        // double xScalingFactor = this.getWidth()/(double)img.getWidth();
-        // draws map
+
         
         int destX = (int) (img.getWidth() * scalingFactor);
         int destY = (int) (img.getHeight() * scalingFactor);
         
         int xOffset = (int)((this.getWidth()-destX)/2.0);
+        int yOffset = (int)((this.getHeight()-destY)/2.0);
         
-        graphics.drawImage(img, xOffset, 0, destX+xOffset, destY,
+        graphics.drawImage(img, xOffset, yOffset, destX+xOffset, destY+yOffset,
                 0, 0, img.getWidth(), img.getHeight(), null);
         // graphics.drawImage(img, 0, 0, (int)(img.getWidth()*scalingFactor),
         // (int)(img.getHeight()*scalingFactor), 0, 0, img.getWidth(),

@@ -14,7 +14,7 @@ public class ImagingGUI {
     
     public ImagingGUI(){
         
-        EffectManager em = new EffectManager(getImage("./src/imaging/RedApple.jpg"));
+        EffectManager em = new EffectManager(getImage("./src/imaging/Irelia.jpg"));
 
         
         frame = new JFrame("Imaging");
@@ -27,6 +27,8 @@ public class ImagingGUI {
         
         ImagingController control = new ImagingController(view, em);
         frame.add(control);
+        ImagingController control2 = new ImagingController(view, em);
+      //  frame.add(control2);
         
         frame.pack();
         frame.setVisible(true);

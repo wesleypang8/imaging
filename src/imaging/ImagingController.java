@@ -32,11 +32,20 @@ public class ImagingController extends JPanel {
         JButton go = new JButton("Go!");
         go.addActionListener(new ButtonListener());
         this.add(go);
-
+        
+        JButton df = new JButton("DEEPFRY");
+        df.addActionListener(new ButtonListener());
+        this.add(df);
+        
+        JButton undo = new JButton("Undo");
+        undo.addActionListener(new ButtonListener());
+        this.add(undo);
+        
         JButton reset = new JButton("Reset");
         reset.addActionListener(new ButtonListener());
         this.add(reset);
 
+        
     }
 
     /**
@@ -56,8 +65,15 @@ public class ImagingController extends JPanel {
             String action = e.getActionCommand();
             if (action.equals("Go!")){
                 view.change((String) options.getSelectedItem());
-            } else{
-                view.reset();
+            } else if(action.equals("DEEPFRY")){
+                view.change("DEEPFRY");
+                
+            }else if (action.equals("Undo")){
+                view.change("Undo");
+            }
+            else {
+            
+                view.change("Reset");
             }
             
 
