@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Random;
 import java.awt.Color;
 import java.awt.image.*;
+import java.awt.Point;
 
 public class EffectManager {
 
@@ -21,16 +23,15 @@ public class EffectManager {
 
     public EffectManager(BufferedImage img) {
         effects = new String[] { "---", "Vertical Flip", "Horizontal Flip", "Invert", "Negative", "Darken", "Lighten",
-                "8-Bit", "Pixel Sort", "Grayscale", "Sharpen", "Add Noise", "Saturate" };
+                "8-Bit", "Pixel Sort", "Grayscale", "Sharpen", "Add Noise", "Saturate", "Light Only" };
         currImage = img;
         origImage = img;
-//        width = img.getWidth();
-//        height = img.getHeight();
         bitPixelWidth = 5;
     }
-    
-    public BufferedImage setImage(BufferedImage img){
+
+    public BufferedImage setImage(BufferedImage img) {
         currImage = img;
+        prevImage = img;
         origImage = img;
         width = img.getWidth();
         height = img.getHeight();
@@ -51,6 +52,7 @@ public class EffectManager {
             BufferedImage temp = prevImage;
             prevImage = currImage;
             currImage = temp;
+
             return currImage;
         }
         prevImage = currImage;
@@ -91,16 +93,36 @@ public class EffectManager {
         case "Saturate":
             currImage = saturate();
         break;
+        case "Light Only":
+            currImage = lightOnly();
+        break;
         case "DEEPFRY":
             currImage = deepfry();
         break;
         case "Reset":
-            currImage=origImage;
-            bitPixelWidth=5;
+            currImage = origImage;
+            bitPixelWidth = 5;
 
         }
 
         return currImage;
+
+    }
+
+
+
+    private BufferedImage lightOnly() {
+        BufferedImage result = new BufferedImage(currImage.getWidth(), currImage.getHeight(), 1);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Color col1 = (new Color(currImage.getRGB(x, y), true));
+                float b1 = Color.RGBtoHSB(col1.getRed(), col1.getGreen(), col1.getBlue(), null)[2];
+                if (b1 > 0.5) {
+                    result.setRGB(x, y, currImage.getRGB(x, y));
+                }
+            }
+        }
+        return result;
 
     }
 
@@ -197,8 +219,10 @@ public class EffectManager {
         Collections.sort(colorList, new Comparator<Color>() {
             @Override
             public int compare(Color c1, Color c2) {
-                return Integer.compare((int) (0.21 * c1.getRed() + 0.72 * c1.getGreen() + 0.07 * c1.getBlue()),
-                        (int) (0.21 * c2.getRed() + 0.72 * c2.getGreen() + 0.07 * c2.getBlue()));
+                float b1 = Color.RGBtoHSB(c1.getRed(), c1.getGreen(), c1.getBlue(), null)[2];
+                float b2 = Color.RGBtoHSB(c2.getRed(), c2.getGreen(), c2.getBlue(), null)[2];
+                return Double.compare(b1, b2);
+
             }
         });
         System.out.println(colorList.size());
