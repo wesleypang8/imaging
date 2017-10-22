@@ -14,32 +14,16 @@ public class ImagingView extends JComponent {
     private static final long serialVersionUID = 1L;
 
     private BufferedImage img;
+    
+    private EffectManager em;
 
-    public ImagingView() {
-        img = this.getImage("./src/imaging/RedApple.jpg");
+    public ImagingView(EffectManager em) {
+        this.em=em;
+        img = em.getImage();
         this.setPreferredSize(new Dimension(1024,600));
+        
     }
 
-    /**
-     * returns the image corresponding to input
-     * 
-     * @param s
-     *            name/relative path of image
-     * @return the image as a BufferedImage
-     * @throws IllegalArgumentException
-     *             if arg is null
-     */
-    private BufferedImage getImage(String s) {
-        if (s == null) {
-            throw new IllegalArgumentException();
-        }
-        try {
-            return ImageIO.read(new File(s));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     /**
      * resets and updates the view for gui
@@ -51,7 +35,7 @@ public class ImagingView extends JComponent {
      */
     public void reset() {
 
-        // update view
+        img = em.reset();
         repaint();
     }
 
@@ -69,7 +53,8 @@ public class ImagingView extends JComponent {
 
         Graphics2D graphics = (Graphics2D) g;
 
-        graphics.setBackground(Color.BLACK);
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0,0,this.getWidth(),this.getHeight());
         // scales image pixels to size of view so locations match
         double wRatio = (this.getWidth() + 0.0) / img.getWidth();
         double hRatio = (this.getHeight() + 0.0) / img.getHeight();
@@ -83,23 +68,26 @@ public class ImagingView extends JComponent {
         System.out.println("scaling: "+scalingFactor);
         // double xScalingFactor = this.getWidth()/(double)img.getWidth();
         // draws map
-        graphics.drawImage(img, 0, 0, (int) (img.getWidth() * scalingFactor), (int) (img.getHeight() * scalingFactor),
+        
+        int destX = (int) (img.getWidth() * scalingFactor);
+        int destY = (int) (img.getHeight() * scalingFactor);
+        
+        int xOffset = (int)((this.getWidth()-destX)/2.0);
+        
+        graphics.drawImage(img, xOffset, 0, destX+xOffset, destY,
                 0, 0, img.getWidth(), img.getHeight(), null);
         // graphics.drawImage(img, 0, 0, (int)(img.getWidth()*scalingFactor),
         // (int)(img.getHeight()*scalingFactor), 0, 0, img.getWidth(),
         // img.getHeight(), null);
 
         
-        if (fliip) {
-            graphics.drawImage(img, (int) (img.getWidth() * scalingFactor), (int) (img.getHeight() * scalingFactor), 0,
-                    0, 0, 0, img.getWidth(), img.getHeight(), null);
-        }
+
     }
 
-    public boolean fliip = false;
 
-    public void flip() {
-        fliip = true;
+
+    public void change(String s) {
+        img = em.buildImage(s);
         repaint();
     }
 }
