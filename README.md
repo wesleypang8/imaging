@@ -1,0 +1,2 @@
+# imaging
+Imaging is an app that lets you manipulate your images with various effects such as sharpening or an 8-Bit effect. Images can be drag and dropped directly into the window, but the image must be stored locally on your CPU (there must be a local file path so you cant drag images from online or other sources direcly). The app is best used for piling on multiple effects and creating an unrecognizable piece of art.
